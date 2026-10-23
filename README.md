@@ -26,3 +26,10 @@ The trade-off: we do not interpret cue payload tags (`<b>`, `<i>`, `<c>`) or par
 ## Edge cases
 
 Timestamps are normalized to `HH:MM:SS.mmm` on output, so a file using the short `MM:SS.mmm` form will come back with the long form. Cue identifiers are any single line above the timestamp line; if that line looks like a timestamp itself, it is treated as a cue without an identifier rather than an identifier.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
